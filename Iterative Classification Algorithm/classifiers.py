@@ -174,6 +174,7 @@ class RelationalClassifier(Classifier):
             The features list might or might not include the node features, depending on
             the value of use_node_attributes.
             '''
+        # 训练节点的label
         conditional_map={}
         for i in train_indices:
             conditional_map[graph.node_list[i]]=graph.node_list[i].label
@@ -182,6 +183,7 @@ class RelationalClassifier(Classifier):
         for i in train_indices:
             self.feature_combination_check(graph,features,i,conditional_map)
             labels.append(graph.node_list[i].label)
+        # features=
         self.clf.fit(features,labels)
     
     def predict(self, graph, test_indices, conditional_node_to_label_map = None):
@@ -198,6 +200,7 @@ class RelationalClassifier(Classifier):
         return self.clf.predict(features)
     
     def feature_combination_check(self,graph,features,i,conditional_map):
+        # aggregates:返回该节点的度
         aggregates=self.aggregator.aggregate(graph,graph.node_list[i],conditional_map)
         feat_list=np.array([])
         if self.use_node_attributes:
